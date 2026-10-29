@@ -1,4 +1,7 @@
-* { box-sizing: border-box; }
+
+* {
+  box-sizing: border-box;
+}
 
 .page {
   min-height: 100vh;
@@ -24,48 +27,38 @@
   pointer-events: none;
 }
 
-/* This grid is aligned to the five rows and five columns in the artwork. */
-.tile-grid {
-  position: absolute;
-  left: 14.5%;     /* Move left/right */
-  top: 22.5%;    /* Move up/down */
-  width: 71%;    /* Make hitboxes wider/narrower */
-  height: 80.5%; /* Make hitboxes taller/shorter */
-
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  grid-template-rows: repeat(5, minmax(0, 1fr));
-  column-gap: .45%;
-  row-gap: 0;
-}
-
-/* Base size for every tile */
+/* Individual clickable tiles */
 .tile-hitbox {
-  width: 97%;
-  height: 97%;
-  margin: auto;
+  position: absolute;
+  display: block;
   box-sizing: border-box;
-  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 2px  rgb(142 92 190 / 85%);
+  border-radius: 8px;
+  background: rgb(180 130 220 / 10%);
+  cursor: pointer;
+  z-index: 2;
 }
 
 .tile-hitbox.is-done:not(.is-free) {
-  background: rgb(255 174 207 / 18%);
+  background: rgb(255 174 207 / 12%);
 }
-
 
 .tile-hitbox:focus-visible {
   outline: 3px solid #a66cc4;
   outline-offset: -3px;
 }
 
-.tile-hitbox.is-done {
-  background: #ffffff12;
+.tile-hitbox.is-free {
+  cursor: default;
 }
 
+/* Completion checkmark */
 .checkmark {
   position: absolute;
-  top: 2.5%;
-  right: 1.5%;
+  top: 6%;
+  right: 3%;
   width: clamp(15px, 2.1vw, 24px);
   height: clamp(15px, 2.1vw, 24px);
   display: grid;
@@ -78,14 +71,13 @@
   box-shadow: 0 1px 2px #684b3920;
 }
 
-.tile-hitbox.is-free { cursor: default; }
-
+/* Progress bar and reset controls */
 .footer-controls {
   position: absolute;
   left: 14%;
   top: 100.8%;
   width: 72%;
-  height: 8.1%;
+  min-height: 8.1%;
   display: grid;
   grid-template-columns: 1.05fr 2.1fr 0.9fr;
   align-items: center;
@@ -94,6 +86,7 @@
   background: #ecc1db;
   border-radius: 30px;
   line-height: normal;
+  z-index: 3;
 }
 
 .live-count {
@@ -108,23 +101,25 @@
 }
 
 .live-progress {
-  width: min(100%, 220px);
-  height: 17px;
-  margin-top: 6px; /* shifts the progress bar down */
+  width: 100%;
+  max-width: 360px;
+  height: 28px;
+  margin-top: 10px;
+  background: #fce0eb;
   border-radius: 999px;
   overflow: hidden;
-  background: #f2dce5;
 }
 
-.live-progress span {
-  display: block;
+.live-progress-fill {
   height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #ffb6cf, #67108d);
-  transition: width 180ms ease;
+  background: linear-gradient(90deg, #C8E8D5, #86C5A5);
+  border-radius: 999px;
+  transition: width 0.3s ease;
 }
 
-.live-reset { justify-self: center; }
+.live-reset {
+  justify-self: center;
+}
 
 .live-reset button {
   border: 1px solid #f19dbd;
@@ -142,6 +137,7 @@
   gap: 4px;
 }
 
+/* Instruction below the bingo board */
 .hint {
   margin: 10px auto 0;
   text-align: center;
@@ -150,11 +146,255 @@
   line-height: 1.4;
 }
 
-@media (max-width: 600px) {
-  .page { padding: 4px; }
-  .tile-grid { border-radius: 0; }
-  .footer-controls { gap: 1%; }
-  .live-count { padding: 3px 5px; }
-  .live-reset button { padding: 4px 7px; }
-  .hint { font-size: 11px; }
+/* Achievement collection */
+.achievement-section {
+  width: min(100%, 1100px);
+  margin: 100px auto 32px;
+  padding: 24px 16px;
+  text-align: center;
+  color: #70473f;
+  line-height: 1.4;
+}
+
+.achievement-section h2 {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 32px);
+}
+
+.achievement-subtitle,
+.journal-subtitle {
+  color: #a27579;
+  font-size: 14px;
+}
+
+.badge-collection {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.achievement-badge {
+  padding: 16px 8px;
+  border: 2px solid #f0c9dc;
+  border-radius: 22px;
+  background: #fffafd;
+  box-shadow: 0 4px 12px #b7839b16;
+}
+
+.achievement-badge.unlocked {
+  border-color: #e9b3d0;
+  background: linear-gradient(160deg, #fffafd, #fff0f7);
+}
+
+.achievement-badge.locked {
+  opacity: 0.65;
+  filter: saturate(0.45);
+}
+
+.badge-sticker {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 10px;
+  border: 2px dashed #edbfd6;
+  border-radius: 50%;
+  background: #fff0f7;
+  font-size: 30px;
+}
+
+.achievement-badge h3 {
+  margin: 4px 0;
+  font-size: 15px;
+}
+
+.achievement-badge p {
+  min-height: 34px;
+  margin: 6px 0;
+  color: #98717f;
+  font-size: 12px;
+}
+
+.badge-status {
+  color: #b56891;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Memory journal popup */
+.journal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 18px;
+  background: rgb(72 43 61 / 48%);
+  line-height: 1.4;
+}
+
+.journal-modal {
+  position: relative;
+  width: min(100%, 460px);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px 24px;
+  border: 3px solid #f3c8df;
+  border-radius: 28px;
+  background: #fffafd;
+  color: #70473f;
+  box-shadow: 0 15px 55px #44223830;
+}
+
+.journal-decoration {
+  margin-bottom: 8px;
+  color: #c57da5;
+  text-align: center;
+}
+
+.journal-modal h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 26px;
+}
+
+.journal-modal h3 {
+  margin: 12px 0 4px;
+  color: #b56891;
+  text-align: center;
+  font-size: 18px;
+}
+
+.journal-subtitle {
+  margin: 0 0 22px;
+  text-align: center;
+}
+
+.journal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  border: 0;
+  background: transparent;
+  color: #a76c89;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.journal-label {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.journal-modal input[type="date"],
+.journal-modal input[type="file"],
+.journal-modal textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;
+  border: 1px solid #edc8dc;
+  border-radius: 12px;
+  background: white;
+  color: #70473f;
+  font: inherit;
+}
+
+.journal-modal textarea {
+  resize: vertical;
+}
+
+.journal-modal button:focus-visible,
+.journal-modal input:focus-visible,
+.journal-modal textarea:focus-visible {
+  outline: 3px solid #c58ac1;
+  outline-offset: 2px;
+}
+
+.memory-photo-preview {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.memory-photo-preview img {
+  display: block;
+  max-width: 100%;
+  max-height: 220px;
+  margin: 0 auto 8px;
+  border-radius: 14px;
+  object-fit: contain;
+}
+
+.memory-photo-preview button {
+  border: 0;
+  background: transparent;
+  color: #a75482;
+  cursor: pointer;
+}
+
+.journal-notice {
+  color: #a75482;
+  font-size: 13px;
+  text-align: center;
+}
+
+.journal-save,
+.journal-complete {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #edb6d0;
+  border-radius: 999px;
+  background: #ffe8f2;
+  color: #8b4e70;
+  font: 800 14px 'Nunito', sans-serif;
+  cursor: pointer;
+}
+
+.journal-complete {
+  border-color: #d6b9ed;
+  background: #f5eaff;
+  color: #79539a;
+}
+
+/* Mobile layout */
+@media (max-width: 650px) {
+  .page {
+    padding: 4px;
+  }
+
+  .footer-controls {
+    gap: 1%;
+  }
+
+  .live-count {
+    padding: 3px 5px;
+  }
+
+  .live-reset button {
+    padding: 4px 7px;
+  }
+
+  .hint {
+    font-size: 11px;
+  }
+
+  .badge-collection {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .achievement-section {
+    margin-top: 100px;
+    padding: 18px 6px;
+  }
+
+  .journal-modal {
+    padding: 26px 17px;
+  }
 }
