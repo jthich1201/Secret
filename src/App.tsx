@@ -281,7 +281,7 @@ export default function App() {
       <div className="artboard">
         <img
           className="reference-art"
-          src="/bingo-reference.png"
+          src={`${import.meta.env.BASE_URL}bingo-reference.png`}
           alt="Katherine's pastel character bingo board"
           draggable="false"
         />
